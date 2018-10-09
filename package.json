@@ -4,6 +4,7 @@
   "description": "The Store & Route in one solution designed to be used with mobX and react",
   "main": "./dist/index.js",
   "scripts": {
+    "prepare": "npm run build",
     "build": "babel es6 --out-dir dist",
     "prepublishOnly": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
