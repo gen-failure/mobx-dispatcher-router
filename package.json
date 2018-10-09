@@ -1,0 +1,52 @@
+{
+  "name": "mobx-dispatcher",
+  "version": "0.0.1",
+  "description": "The Store & Route in one solution designed to be used with mobX and react",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "babel es6 --out-dir dist",
+    "prepublishOnly": "npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Michal Koudelka",
+  "license": "ISC",
+  "dependencies": {
+    "parse-route": "0.0.1",
+    "route-parser": "0.0.5"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.1.2",
+    "@babel/core": "^7.1.2",
+    "@babel/plugin-proposal-class-properties": "^7.1.0",
+    "@babel/plugin-proposal-decorators": "^7.1.2",
+    "@babel/plugin-syntax-dynamic-import": "^7.0.0",
+    "@babel/plugin-transform-classes": "^7.1.0",
+    "babel-plugin-transform-decorators-legacy": "^1.3.5",
+    "babel-preset-env": "^1.7.0",
+    "mobx": "^5.5.0"
+  },
+  "module": "./src/index.js",
+  "babel": {
+    "presets": [
+      [
+        "env",
+        {
+          "targets": {
+            "node": "current"
+          }
+        }
+      ]
+    ],
+    "plugins": [
+      [
+        "@babel/plugin-proposal-decorators",
+        {
+          "legacy": true
+        }
+      ],
+      ["@babel/plugin-proposal-class-properties", { "loose": true}],
+      "@babel/plugin-syntax-dynamic-import",
+      "@babel/plugin-transform-classes"
+    ]
+  }
+}
