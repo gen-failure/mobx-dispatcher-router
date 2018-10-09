@@ -1,5 +1,5 @@
 {
-  "name": "mobx-dispatcher",
+  "name": "mobx-dispatcher-router",
   "version": "0.0.2",
   "description": "The Store & Route in one solution designed to be used with mobX and react",
   "main": "./dist/index.js",
