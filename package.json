@@ -3,6 +3,10 @@
   "version": "0.0.2",
   "description": "The Store & Route in one solution designed to be used with mobX and react",
   "main": "./dist/index.js",
+  "files": [
+    "lib",
+    "README.md"
+  ],
   "scripts": {
     "prepare": "npm run build",
     "build": "babel es6 --out-dir dist",
