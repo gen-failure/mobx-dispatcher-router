@@ -12,7 +12,8 @@
   "license": "ISC",
   "dependencies": {
     "parse-route": "0.0.1",
-    "route-parser": "0.0.5"
+    "route-parser": "0.0.5",
+    "url-search-params-polyfill": "^5.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.2",
@@ -44,7 +45,12 @@
           "legacy": true
         }
       ],
-      ["@babel/plugin-proposal-class-properties", { "loose": true}],
+      [
+        "@babel/plugin-proposal-class-properties",
+        {
+          "loose": true
+        }
+      ],
       "@babel/plugin-syntax-dynamic-import",
       "@babel/plugin-transform-classes"
     ]
