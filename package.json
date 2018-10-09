@@ -4,7 +4,7 @@
   "description": "The Store & Route in one solution designed to be used with mobX and react",
   "main": "./dist/index.js",
   "files": [
-    "lib",
+    "dist",
     "README.md"
   ],
   "scripts": {
