@@ -3,6 +3,7 @@
   "version": "0.0.2",
   "description": "The Store & Route in one solution designed to be used with mobX and react",
   "main": "./dist/index.js",
+  "repository": "https://github.com/gen-failure/mobx-dispatcher.git",
   "files": [
     "dist",
     "README.md"
@@ -13,7 +14,7 @@
     "prepublishOnly": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Michal Koudelka",
+  "author": "Michal Koudelka <koudelka.michal@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "parse-route": "0.0.1",
