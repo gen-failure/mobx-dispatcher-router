@@ -1,32 +1,66 @@
 import {action, observable} from 'mobx';
 import Route from 'route-parser';
+import URLSearchParamsPolyfill from 'url-search-params-polyfill';
 
 /**
  *  NavStore router is attached automatically to Dispatcher on initialization and it's responsible for routing functionality
  */
+
+const URLSearchParams = window.URLSearchParams || URLSearchParamsPolyfill;
+
+
 class NavStore {
-  @observable path;
+  @observable path="";
+  @observable query=""
+
   constructor() {
     this.baseRoute = "";
     this.notFoundRoute = false;
     this.routes = new Map();
-    this.pathObserver = window.onpopstate= () => {
-      this._onPathChange();
+    this.routeObserver = window.onpopstate= () => {
+      this._onRouteChange();
     }
   }
   /**
    *  Dispatcher callback, check initial route and render appropriate page
    */
   onRouterStart() {
-    this._onPathChange();
+    this._onRouteChange();
   }
 
   /**
    *  Event handler is called on path change
    */
-  _onPathChange() {
+  _onRouteChange() {
     this.path = window.location.pathname;
-    this._evaluatePath();
+    this.query = window.location.search;
+    
+
+    this._evaluateRoute();
+  }
+
+  get _queryObject() {
+    let query = {}
+
+    let queryIterator = new URLSearchParams(this.query);
+    for (let [param,value] of queryIterator.entries()) {
+      switch(typeof query[param]) {
+        case 'object':
+          query[param].push(value);
+          break;
+        case 'string':
+          query[param] = [query[param], value];
+          break;
+        case 'undefined':
+          query[param] = value;
+          break;
+        default:
+          throw(new Error("failed to parse parameters"));
+      }
+      this.query = window.location.search;
+    }
+
+    return query;
   }
 
   /**
@@ -36,7 +70,7 @@ class NavStore {
   */
   @action goTo(path) {
     window.history.pushState(null, null, path);
-    this._onPathChange();
+    this._onRouteChange();
   }
 
   /**
@@ -44,9 +78,9 @@ class NavStore {
    *  
    *  @param {String} path new path 
    */
-  @action changeTo(path) {
-    window.history.replaceState(null, null, path);
-    this._onPathChange();
+  @action changeTo(route) {
+    window.history.replaceState(null, null, route);
+    this._onRouteChange();
   }
 
   /**
@@ -60,11 +94,10 @@ class NavStore {
   }
 
 
-  _evaluatePath() {
-    console.log(this.routes);
+  _evaluateRoute() {
     for (let [route,callback] of this.routes) {
       let match = route.match(this.path);
-      if (match) return callback(match);
+      if (match) return callback(match, this._queryObject);
     }
     if (typeof this.notFoundRoute === 'string' ) return this.changeTo(this.notFoundRoute);
   }
