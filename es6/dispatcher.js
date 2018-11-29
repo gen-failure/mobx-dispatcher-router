@@ -42,14 +42,6 @@ class Dispatcher {
     if (storeName !== 'nav') {
       storeObject.stores = this.stores;
 
-      storeObject.navigateTo = (path) => {
-        return this.stores.nav.goTo(path);
-      }
-
-      storeObject.changePath = (path) => {
-        return this.stores.nav.changeTo(path);
-      }
-
       storeObject.addRoute = (path, callback) => {
         this.stores.nav.addRoute(path, callback);
       }
