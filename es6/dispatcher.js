@@ -6,9 +6,10 @@ import Route from 'route-parser';
  */
 class Dispatcher {
   /**
-   *  @param {String} baseRouter scope for application route. Empty string by default
+   *  @param {Object} params
+   *  @param {String} params.baseRoute prefix for application route. Empty string by default
    */
-  constructor(baseRoute="") {
+  constructor({baseRoute=""}) {
     /** @member {Object} */
     this.stores = {}
     this.attachStore(NavStore);
@@ -17,7 +18,6 @@ class Dispatcher {
   /**
    *  @param {Class} StoreClass store class to attach
    *  @param {String} [name] name used to refer store
-   *
    *
    */
   attachStore(StoreClass, name) {
