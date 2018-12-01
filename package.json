@@ -12,7 +12,8 @@
     "prepare": "npm run build",
     "build": "babel es6 --out-dir dist",
     "prepublishOnly": "npm run build",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/.bin/mocha tests/*.spec.js --reporter spec --compilers js:@babel/register",
+    "prettier": "./node_modules/.bin/prettier --write \"{es6,test}/**/*.js\""
   },
   "author": "Michal Koudelka <koudelka.michal@gmail.com>",
   "license": "ISC",
@@ -28,9 +29,16 @@
     "@babel/plugin-proposal-decorators": "^7.1.2",
     "@babel/plugin-syntax-dynamic-import": "^7.0.0",
     "@babel/plugin-transform-classes": "^7.1.0",
+    "@babel/register": "^7.0.0",
     "babel-plugin-transform-decorators-legacy": "^1.3.5",
     "babel-preset-env": "^1.7.0",
-    "mobx": "^5.5.0"
+    "chai": "^4.2.0",
+    "chai-spies": "^1.0.0",
+    "jsdom": "^13.0.0",
+    "mobx": "^5.5.0",
+    "mocha": "^5.2.0",
+    "mocha-jsdom": "^2.0.0",
+    "prettier": "^1.15.3"
   },
   "module": "./src/index.js",
   "babel": {
