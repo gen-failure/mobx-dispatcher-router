@@ -90,6 +90,14 @@ class Dispatcher {
       cb(routeObject);
     });
   }
+
+  get storesObject() {
+    let obj = {};
+    for (let [storeName, store] of this.stores) {
+      obj[storeName] = store;
+    }
+    return obj;
+  }
 }
 
 export default Dispatcher;
