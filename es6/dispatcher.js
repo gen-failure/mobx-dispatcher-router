@@ -1,5 +1,6 @@
 import NavStore from "./nav-store";
 import Route from "route-parser";
+import BaseRoute from "./base-route";
 
 /**
  *  Dispatcher is a store management and functional router for mobx
@@ -7,13 +8,19 @@ import Route from "route-parser";
 class Dispatcher {
   /**
    *  @param {Object} params
-   *  @param {String} params.baseRoute prefix for application route. Empty string by default
+   *  @param {BaseRoute} params.baseRoute prefix for application route. Empty string by default
    */
-  constructor({ baseRoute = "" }) {
+  constructor(params = { baseRoute: null }) {
     /** @member {Object} */
-    this.stores = {};
+    if (params.baseRoute instanceof BaseRoute) {
+      this.baseRoute = params.baseRoute;
+    } else {
+      this.baseRoute = new BaseRoute("");
+    }
+    this.stores = new Map();
     this.attachStore(NavStore);
-    this.stores.nav.baseRoute = baseRoute;
+    this.stores.get("nav").baseRoute = this.baseRoute;
+    this.routeChangeCallbacks = [];
   }
   /**
    *  @param {Class} StoreClass store class to attach
@@ -36,29 +43,33 @@ class Dispatcher {
     }
 
     if (storeName.length === 0) throw new Error("Store name can't be empty!");
-    if (Object.keys(this.stores).indexOf(storeName) !== -1)
+    if (this.stores.get(storeName) !== undefined)
       throw new Error(`store ${storeName} already exists, choose another one`);
 
     if (storeName !== "nav") {
       storeObject.stores = this.stores;
 
+      storeObject.nav = this.stores.get("nav"); // Just a shortcut
+
       storeObject.addRoute = (path, callback) => {
-        this.stores.nav.addRoute(path, callback);
+        this.stores.get("nav").addRoute(path, callback);
       };
+    } else {
+      storeObject.dispatcher = this;
     }
 
-    this.stores[storeName] = storeObject;
-    if (typeof this.stores[storeName].onAttach === "function")
-      this.stores[storeName].onAttach();
+    this.stores.set(storeName, storeObject);
+    if (typeof this.stores.get(storeName).onAttach === "function")
+      this.stores.get(storeName).onAttach();
   }
+
   /**
    * A method to call when all stores are attached. It renders the current path and call onRouterStart
    * callback for every attached router (if callback exists)
    */
   start() {
-    Object.keys(this.stores).forEach(store => {
-      if (typeof this.stores[store].onRouterStart === "function")
-        this.stores[store].onRouterStart();
+    this.stores.forEach(store => {
+      if (typeof store.onRouterStart === "function") store.onRouterStart();
     });
   }
 
@@ -68,6 +79,16 @@ class Dispatcher {
    */
   setNotFoundRoute(path) {
     this.stores.nav.notFoundRoute = path;
+  }
+
+  onRouteChanged(fn) {
+    this.routeChangeCallbacks.push(fn);
+  }
+
+  _routeChanged(routeObject) {
+    this.routeChangeCallbacks.forEach(cb => {
+      cb(routeObject);
+    });
   }
 }
 
