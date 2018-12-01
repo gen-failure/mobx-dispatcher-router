@@ -11,7 +11,7 @@ class NavStore {
   @observable query = "";
 
   constructor() {
-    this.appPath = "";
+    this.appPath = null;
     this.notFoundRoute = false;
     this.routes = new Map();
     this.routeObserver = window.onpopstate = () => {
@@ -103,8 +103,11 @@ class NavStore {
   }
 
   _evaluateRoute() {
+    let r = this.appPath
+      ? `${this.baseRoute.getCurrent()}${this.appPath}`
+      : `${this.path}${this.query}`;
     for (let [route, callback] of this.routes) {
-      let match = route.match(`${this.baseRoute.getCurrent()}${this.appPath}`);
+      let match = route.match(r);
       if (match) {
         Object.keys(match).forEach(key => {
           if (match[key] === undefined) delete match[key];
